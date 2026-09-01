@@ -1,254 +1,62 @@
-<p align="center">
-  <img src="./plugins/taskboard/assets/icon.svg" width="64" height="64" alt="Taskboard ticket icon" />
-</p>
+# Action Topbar
 
-<h1 align="center">BB Plugins</h1>
+> [!WARNING]
+> This plugin is experimental and is not being submitted to the BB
+> Marketplace yet. It requires the matching BB core changes and the
+> experimental Action split-drag API introduced in Plugin SDK 0.4.33. Install
+> it only on a compatible BB build; older BB releases cannot provide its native
+> main-workspace panes.
 
-<p align="center">
-  Focused extensions for <a href="https://github.com/get-bb/bb">BB</a>, kept together in one extensible workspace.
-</p>
+Action Topbar projects BB Actions opened as main-workspace panes into the
+**main thread topbar**. Pane content stays under BB's ownership; the topbar
+adds an Orca-style strip and searchable **+** combobox while the right panel
+keeps its original New Tab / Actions launcher.
 
-<p align="center">
-  <a href="https://github.com/MateoCerquetella/bb-plugins/actions/workflows/ci.yml"><img src="https://img.shields.io/github/actions/workflow/status/MateoCerquetella/bb-plugins/ci.yml?branch=main&style=flat-square&label=CI" alt="CI status" /></a>
-  <img src="https://img.shields.io/badge/BB-%E2%89%A5%200.38-7c3aed?style=flat-square" alt="BB 0.38 or newer" />
-  <a href="./LICENSE"><img src="https://img.shields.io/badge/license-MIT-16a34a?style=flat-square" alt="MIT license" /></a>
-</p>
+Action-to-pane dragging requires BB's experimental thread Action split-drag
+content-script API. Older compatible BB clients keep the menu visible but do
+not start a split gesture.
 
-![Taskboard running inside BB](./docs/media/hero.png)
+- Click a tab to focus its main-workspace pane without opening the right panel.
+- Close a tab from the left-side **×** shown on hover, focus, or activation.
+- Drag topbar tabs inside the strip to persist their new order.
+- Drag an Action directly from the topbar **+** menu onto BB's pane zones.
+  Edge drops create a main-workspace split; a center drop replaces that pane.
+- Action rows are drag-only. Clicking or pressing Enter does not open them in
+  the native right panel.
+- Drag an already-open relaunchable panel tab onto another existing split pane
+  to open that panel for the target thread.
+- Select the topbar **+** for an auto-focused combobox. Its empty state lists actions;
+  typing searches both actions and already-open tabs, with keyboard navigation.
+- Open BB's native New Tab once after installing or removing another plugin;
+  Action Topbar learns its live third-party action inventory.
 
-## Plugins
+The right panel's own **+** continues to open BB's original Search files,
+Actions, and Recent page. The plugin hides only the duplicated content-tab
+pills there; Info, Diff, fullscreen/collapse, and hide-panel controls remain
+native and visible.
 
-| | Plugin | Install | What it does |
-| --- | --- | --- | --- |
-| <img src="./plugins/dockside/assets/icon.svg" width="28" height="28" alt="" /> | [Dockside](./plugins/dockside) | [Git branch](#dockside-quick-start) | Replaces BB's thread list with a compact project-first sidebar, semantic status colors, filters, safe multi-select deletion, and child-agent families. |
-| <img src="./plugins/host-monitor/assets/icon.svg" width="28" height="28" alt="" /> | [Host Monitor](./plugins/host-monitor) | [Git release](#host-monitor-quick-start) | Monitors CPU, RAM, disk, network, host details, and guarded process actions across every machine enrolled in BB. Requires BB 0.40+. |
-| <img src="./plugins/save-my-model/assets/icon.svg" width="28" height="28" alt="" /> | [Save My Model](./plugins/save-my-model) | [Git release](#save-my-model-quick-start) | Stores provider by BB host and model/reasoning separately for each host and provider. |
-| <img src="./plugins/taskboard/assets/icon.svg" width="28" height="28" alt="" /> | [Taskboard](./plugins/taskboard) | [Git release](#taskboard-quick-start) | Brings each BB project's GitHub, Linear, or Jira tasks into one focused List or Kanban board. |
-| <img src="./plugins/usage-tracker/assets/icon.svg" width="28" height="28" alt="" /> | [Usage Tracker](./plugins/usage-tracker) | [Git release](#usage-tracker-quick-start) | Keeps Codex and Claude Code 5-hour and weekly limits beside BB's sidebar utility icons. |
+The plugin does not recreate Browser, Terminal, Recap, File Manager, Git
+History, Side Chat, Taskboard, Workflows, or third-party panels. Main panes
+stay host-rendered, and launcher rows still execute through their owning
+plugin.
 
-## Dockside quick start
+## Install
 
-Install Dockside directly from this repository branch while PR #26 is under
-review:
-
-```sh
-bb plugin install git:https://github.com/MateoCerquetella/bb-plugins.git@feature/dockside-thread-filters-bulk-delete --subdirectory plugins/dockside
-```
-
-Dockside groups threads by project, keeps root/child families together, adds
-working/needs-you/unread/quiet filters, and protects current, active, waiting,
-unread, and pinned families from permanent bulk deletion. Open
-**Settings → Dockside** to choose semantic status and PR colors, density,
-default child expansion, and optional metadata. See the
-[Dockside README](./plugins/dockside) for behavior and development details.
-
-Update or remove a local installation with BB:
-
-```sh
-bb plugin reload dockside
-bb plugin remove dockside
-```
-
-## Host Monitor quick start
-
-Install the immutable Host Monitor Git release directly from this monorepo:
+Install from Git on a compatible BB build:
 
 ```sh
-bb plugin install git:https://github.com/MateoCerquetella/bb-plugins.git@^0.1.0 --subdirectory plugins/host-monitor --tag-prefix host-monitor/
+bb plugin install git:https://github.com/MateoCerquetella/bb-plugins.git@main \
+  --subdirectory plugins/action-topbar \
+  --yes
 ```
 
-Host Monitor requires BB 0.40 or later; the collection's other plugins retain
-their BB 0.38-compatible releases.
-
-An installation made under Host Monitor's retired plugin id cannot update
-across the rename. Remove that earlier Host Monitor entry, then use the command
-above; threshold settings must be applied again for a managed installation.
-
-After [the BB Community entry](https://github.com/get-bb/marketplace/pull/128)
-is merged and live, the equivalent shorthand is:
+Or install a local checkout in place:
 
 ```sh
-bb plugin install host-monitor
+bb plugin install path:/absolute/path/to/bb-plugins/plugins/action-topbar --yes
 ```
-
-Host Monitor keeps live CPU, RAM used/total, disk, network, load, uptime, and
-connection state in responsive cards or rows. Its sidebar control opens a
-compact summary or movable floating monitor, while Host details provides a
-searchable process ledger with explicit, freshly validated stop confirmations.
-IPs remain masked until revealed. See the
-[Host Monitor README](./plugins/host-monitor) for platform support, privacy,
-thresholds, and process-safety details.
-
-Update or remove it with BB:
-
-```sh
-bb plugin outdated
-bb plugin update host-monitor
-bb plugin remove host-monitor
-```
-
-## Save My Model quick start
-
-Install the latest immutable Save My Model release directly from this monorepo:
-
-```sh
-bb plugin install git:https://github.com/MateoCerquetella/bb-plugins.git@^0.1.2 --subdirectory plugins/save-my-model --tag-prefix save-my-model/
-```
-
-After [the BB Community entry](https://github.com/get-bb/marketplace/pull/154)
-is merged and live, install it by its short name:
-
-```sh
-bb plugin install save-my-model
-```
-
-Save My Model keeps provider defaults separate for each host and keeps model
-and reasoning separate for each host and provider. Open **Settings → Save My Model** to inspect or clear saved
-values. See the [Save My Model README](./plugins/save-my-model) for details.
-
-Update or remove it with BB:
-
-```sh
-bb plugin outdated
-bb plugin update save-my-model
-bb plugin remove save-my-model
-```
-
-## Taskboard quick start
-
-Install the tracking Git release directly from this monorepo:
-
-```sh
-bb plugin install git:https://github.com/MateoCerquetella/bb-plugins.git@^0.3.0 --subdirectory plugins/taskboard --tag-prefix taskboard/
-```
-
-After [the BB Community entry](https://github.com/get-bb/marketplace/pull/129)
-is merged and live, the equivalent shorthand is:
-
-```sh
-bb plugin install taskboard
-```
-
-Then open **Taskboard → Manage**, choose a BB project, and select exactly one
-external tracker for it. Different BB projects can use different providers.
-
-Taskboard keeps rows and Kanban cards compact, preserves each provider's real
-workflow, opens live issue details, and can send any task to an agent with its
-context attached. Each project's remembered view can also be saved as a named
-preset and reapplied explicitly from the board or CLI. See the
-[Taskboard README](./plugins/taskboard) for GitHub, Linear, Jira, presets, CLI,
-and credential setup.
-
-Update or remove it with BB:
-
-```sh
-bb plugin outdated
-bb plugin update taskboard
-bb plugin remove taskboard
-```
-
-## Usage Tracker quick start
-
-Install the tracking Git release directly from this monorepo:
-
-```sh
-bb plugin install git:https://github.com/MateoCerquetella/bb-plugins.git@^0.1.3 --subdirectory plugins/usage-tracker --tag-prefix usage-tracker/
-```
-
-After [the BB Community entry](https://github.com/get-bb/marketplace/pull/129)
-is updated and live, the equivalent shorthand is:
-
-```sh
-bb plugin install usage-tracker
-```
-
-Usage Tracker mounts in BB's native sidebar footer beside the existing utility
-icons. Each provider gets a compact progress bar and current usage reading.
-Select Codex or Claude Code to expand its five-hour, weekly, and any additional
-provider-defined limits, reset times, and session status without leaving the
-current thread. There is no separate plugin page to manage. The **Compact
-limit** setting chooses whether the collapsed percentage and bar prefer weekly
-or five-hour usage.
-
-The strip refreshes automatically every five minutes, refreshes when a stale BB
-window becomes active again, and includes a manual refresh control. If a
-provider is briefly unavailable or rate-limited, the last known limit windows
-remain visible with the current status. See the
-[Usage Tracker README](./plugins/usage-tracker) for requirements, behavior, and
-development details.
-
-Update or remove it with BB:
-
-```sh
-bb plugin outdated
-bb plugin update usage-tracker
-bb plugin remove usage-tracker
-```
-
-## Build from source
-
-Each plugin is an independent BB package under `plugins/<id>`. Clone the
-workspace once, install the shared dependencies, and register a plugin as a
-local-path source:
-
-```sh
-git clone https://github.com/MateoCerquetella/bb-plugins.git
-cd bb-plugins
-npm install
-npm run build
-bb plugin install ./plugins/dockside
-bb plugin install ./plugins/host-monitor
-bb plugin install ./plugins/taskboard
-bb plugin install ./plugins/usage-tracker
-```
-
-BB reads local-path plugins in place, so the development loop stays short:
-
-```sh
-git pull
-npm install
-npm run build
-bb plugin reload dockside
-bb plugin reload host-monitor
-bb plugin reload taskboard
-bb plugin reload usage-tracker
-```
-
-BB 0.38 and newer reads the repository's `.bb/plugins.json` collection, so a
-plugin can also be installed straight from Git:
-
-```sh
-bb plugin install git:https://github.com/MateoCerquetella/bb-plugins.git@feature/dockside-thread-filters-bulk-delete --plugin dockside
-bb plugin install git:https://github.com/MateoCerquetella/bb-plugins.git@main --plugin host-monitor
-bb plugin install git:https://github.com/MateoCerquetella/bb-plugins.git@main --plugin taskboard
-bb plugin install git:https://github.com/MateoCerquetella/bb-plugins.git@main --plugin usage-tracker
-```
-
-Host Monitor, Taskboard, and Usage Tracker release through immutable
-plugin-specific Git tags and the BB Community marketplace. Dockside remains a
-branch installation until PR #26 lands and a release is prepared.
 
 ## Develop
 
-Run every plugin's checks from the workspace root:
-
-```sh
-npm install
-npm run check
-```
-
-New plugins belong in `plugins/<id>` with their own `package.json`, source,
-tests, pinned `@get-bb/plugin-sdk` development dependency, and README. Add each
-directory to `.bb/plugins.json`; the root workspace picks it up automatically.
-
-## Contributors
-
-- [Stephen Dolan (@stephendolan)](https://github.com/stephendolan) contributed
-  Usage Tracker's configurable Compact limit.
-- [Andrii Los (@RIP21)](https://github.com/RIP21) contributed Taskboard's
-  project-view persistence work and dogfooding fixes, plus named filter
-  presets.
-
-## License
-
-[MIT](./LICENSE) © 2026 Mateo Cerquetella.
+From the repository root, run `bun run dev`. The workspace watcher builds and
+reloads this plugin when its source changes.
