@@ -1,32 +1,37 @@
-# Third-party notices
+# Third-party notices — Action Topbar
 
-Dockside is derived from BB's MIT-licensed `examples/plugins/t3sidebar`, vendors
-BB registry/shadcn UI components and provider mark geometry, and uses
-MIT-licensed Hugeicons, clsx, tailwind-merge, and Zod. Provider marks remain
-trademarks of their respective owners and are used only for identification.
-Full attribution and license text are included in
-`plugins/dockside/THIRD_PARTY_NOTICES.md`.
+The plugin's code and artwork are original and distributed under the MIT
+licence in [LICENSE](LICENSE), Copyright (c) 2026 Mateo Cerquetella.
 
-Taskboard vendors UI component source generated from the
-[BB component registry](https://github.com/get-bb/bb). BB and that component
-source are distributed under the MIT License.
+`@get-bb/plugin-sdk` is supplied by bb at run time and is not bundled in this
+package.
 
-Taskboard also uses the third-party dependencies declared in
-`plugins/taskboard/package.json`. Their copyright and license notices remain
-available in their respective packages and repositories.
+---
 
-Host Monitor includes the Hugeicons Free Icons `ComputerTerminal01` glyph in
-its icon and logo assets and bundles Zod for server/host RPC validation. Both
-projects are distributed under the MIT License. Full attribution and license
-text are included in
-`plugins/host-monitor/THIRD_PARTY_NOTICES.md`.
+## zod
 
-Usage Tracker includes provider brand-mark geometry adapted from BB's provider
-icon components and the Hugeicons Free Icons `BarChart` glyph in its assets.
-Both source projects distribute that material under the MIT License. Provider
-marks remain trademarks of their respective owners and are used only to
-identify the corresponding service.
+MIT License, Copyright (c) 2025 Colin McDonnell.
 
-Usage Tracker also bundles Zod under its MIT License. Full attribution and
-license text are included in
-`plugins/usage-tracker/THIRD_PARTY_NOTICES.md`.
+Zod validates the plugin RPC contract and is bundled into `dist/server.js`.
+
+Source: <https://github.com/colinhacks/zod>
+
+```
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+```
