@@ -320,3 +320,12 @@ interaction; website credentials and MFA belong in that embedded browser.
 Page-level navigation avoids browser-wide attachment stalls caused by unrelated
 browser UI targets in newer Chromium builds. Navigation failures are not replayed;
 inspect the same session before retrying an uncertain result.
+
+## Registered BB host selection
+
+When the server hostname differs from its registered BB machine name, set
+`steelHostId` to the stable ID returned by `bb machine list --json`:
+`bb plugin config steel-browser set steelHostId <host-id>`.
+The selected host must be the machine running the BB server and local Docker.
+It affects both provisioning and viewer-share recovery. It does not move Docker
+execution to another machine. Empty retains the system hostname default.

@@ -70,7 +70,8 @@
     "sign-ins-panel.tsx",
     "dashboard-cache.ts",
     "provisioning.ts",
-    "scripts/"
+    "scripts/",
+    "host-selection.ts"
   ],
   "dependencies": {
     "lucide-react": "^1.49.0",
@@ -78,7 +79,7 @@
     "zod": "^4.3.6"
   },
   "devDependencies": {
-    "@get-bb/plugin-sdk": "0.6.104",
+    "@get-bb/plugin-sdk": "0.6.132",
     "@pierre/diffs": "^1.2.9",
     "@radix-ui/react-alert-dialog": "^1.1.19",
     "@radix-ui/react-context-menu": "^2.3.3",
@@ -95,22 +96,23 @@
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
     "@types/ws": "^8.18.2",
-    "bb-app": "0.48.1",
+    "better-sqlite3": "^12.11.1",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "cron-parser": "^5.10.2",
+    "hono": "^4.11.9",
     "sonner": "^1.7.4",
     "tailwind-merge": "^3.4.0",
     "tsx": "^4.23.15",
-    "typescript": "^7.0.0",
+    "typescript": "^6.0.0",
     "vaul": "^1.1.2",
     "ws": "^8.22.0"
   },
   "scripts": {
-    "build": "env -u BB_CLI bb plugin build .",
+    "build": "bb plugin build .",
     "dev": "bb plugin dev .",
     "typecheck": "tsc --noEmit",
-    "types:check": "env -u BB_CLI bb plugin types --check .",
+    "types:check": "bb plugin types --check .",
     "types:refresh": "env -u BB_CLI bb plugin types .",
     "test": "tsx --test test/*.test.ts",
     "check": "npm run types:check && npm run typecheck && npm test && npm run build"

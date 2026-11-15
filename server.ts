@@ -1,3 +1,5 @@
+import { hostname } from "node:os";
+import { resolveSteelHost } from "./host-selection.ts";
 import type { BbPluginApi } from "@get-bb/plugin-sdk";
 import { rpcContract, scopeSchema, type CreateOptions, type Scope, type EnginePolicy, type ServiceId } from "./contract.ts";
 import { normalizeBaseUrl, SteelClient, SteelClientError } from "./steel-client.ts";
@@ -37,6 +39,12 @@ export default function steelBrowserPlugin(bb: BbPluginApi): void {
   const signIns = new SignIns(bb.storage.kv);
   const dashboards = new DashboardCache<Dashboard>();
   const settings = bb.settings.define({
+    steelHostId: {
+      type: "string",
+      label: "Steel host ID",
+      description: "Registered BB machine ID on which this BB server and Docker run. Find it with bb machine list. Empty uses the system hostname. This selects Connect routing, not remote Docker execution.",
+      default: "",
+    },
     jevCheckout: {
       type: "string",
       label: "jev-ultrafast checkout",
@@ -99,12 +107,13 @@ export default function steelBrowserPlugin(bb: BbPluginApi): void {
     return projects.ensure(projectId, async (id, existing) => {
       const config = await settings.get();
       const dns = String(config.dnsServers || "1.1.1.1,8.8.8.8").split(",").map(value => value.trim()).filter(Boolean);
-      const binding = await provisionProjectInstance(id, { dns, existing });
+      const binding = await provisionProjectInstance(id, { dns, existing, host: resolveSteelHost(config.steelHostId, hostname()) });
       await verifyProjectInstance(id, binding);
       return binding;
     }, async binding => {
       if (!await bindingReady(binding)) return false;
-      await ensureViewerShare(projectId, binding);
+      const config = await settings.get();
+      await ensureViewerShare(projectId, binding, { host: resolveSteelHost(config.steelHostId, hostname()) });
       return true;
     });
   }

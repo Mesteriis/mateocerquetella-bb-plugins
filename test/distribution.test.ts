@@ -11,9 +11,8 @@ test("declares an independent BB app, server, CLI skill, and pinned SDK", async 
   assert.equal(packageJson.bb.server, "./server.ts");
   assert.equal(packageJson.bb.app, "./app.tsx");
   assert.deepEqual(packageJson.bb.skills, ["./skills/steel-browser"]);
-  assert.equal(packageJson.devDependencies["@get-bb/plugin-sdk"], "0.6.104");
-  assert.equal(packageJson.devDependencies["bb-app"], "0.48.1");
-  assert.match(packageJson.scripts.build, /^env -u BB_CLI /u);
+  assert.equal(packageJson.devDependencies["@get-bb/plugin-sdk"], "0.6.132");
+  assert.equal(packageJson.scripts.build, "bb plugin build .");
   assert.ok(packageJson.files.includes("jev-runtime.ts"));
 });
 
@@ -62,7 +61,7 @@ test("contributes Steel discovery instructions to new agent sessions", async () 
   assert.match(server, /const binding = await ensureBinding\(projectId\);/u);
   assert.match(server, /async binding => \{/u);
   assert.match(server, /if \(!await bindingReady\(binding\)\) return false;/u);
-  assert.match(server, /await ensureViewerShare\(projectId, binding\);/u);
+  assert.match(server, /await ensureViewerShare\(projectId, binding, \{ host: resolveSteelHost\(config.steelHostId, hostname\(\)\) \}\);/u);
   assert.match(server, /return true;/u);
   assert.match(server, /client\(scope, true\)/u);
   const allProjects = server.slice(server.indexOf("async allProjects()"), server.indexOf("async project(scope"));
